@@ -6,6 +6,7 @@ export async function getCacheMetadata(
 ): Promise<CacheMetadata> {
   const cacheMetadataPath = `${cacheFolderPath}/cache.json`;
   let cachedMetadata: CacheMetadata | undefined;
+
   try {
     await stat(cacheMetadataPath);
     cachedMetadata = JSON.parse(await readFile(cacheMetadataPath, "utf-8"));
