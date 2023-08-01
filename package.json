@@ -1,0 +1,22 @@
+{
+  "name": "nebula-genesis",
+  "version": "0.1.0",
+  "description": "Download and cache workflow for Notion databases.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "notion",
+    "jamstack",
+    "sustainability"
+  ],
+  "author": "RIMAROK.com",
+  "license": "ISC",
+  "dependencies": {
+    "@notionhq/client": "^2.2.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}
