@@ -9,11 +9,11 @@ import { getPageBlocks } from "./src/getPageBlocks/getPageBlocks";
 import { downloadImage } from "./src/downloadImage/downloadImage";
 
 async function run() {
-  const { notionToken, databaseId, cachePath } = argsReception();
+  const { notionToken, databaseId, cachePath, onOrAfter } = argsReception();
 
   await createFolder(cachePath);
 
-  const { LAST_RUN } = await getCacheMetadata(cachePath);
+  const { LAST_RUN } = await getCacheMetadata(cachePath, onOrAfter);
 
   const notionClient = new Client({ auth: notionToken });
 

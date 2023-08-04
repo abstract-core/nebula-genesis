@@ -2,14 +2,19 @@ import { writeFile, readFile, stat } from "fs/promises";
 import { CacheMetadata } from "../_types/CacheMetadata";
 
 export async function getCacheMetadata(
-  cacheFolderPath: string
+  cacheFolderPath: string,
+  onOrAfter?: string
 ): Promise<CacheMetadata> {
   const cacheMetadataPath = `${cacheFolderPath}/cache.json`;
   let cachedMetadata: CacheMetadata | undefined;
 
   try {
     await stat(cacheMetadataPath);
-    cachedMetadata = JSON.parse(await readFile(cacheMetadataPath, "utf-8"));
+    cachedMetadata = JSON.parse(
+      await readFile(cacheMetadataPath, "utf-8")
+    ) as CacheMetadata;
+
+    if (onOrAfter) cachedMetadata.LAST_RUN = onOrAfter;
   } catch (error) {}
 
   const currentDate = new Date();

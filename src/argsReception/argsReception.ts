@@ -13,5 +13,6 @@ export function argsReception() {
     notionToken,
     databaseId,
     cachePath: args["CACHE_PATH"] || "./cache",
+    onOrAfter: args["ON_OR_AFTER"] || undefined,
   };
 }
