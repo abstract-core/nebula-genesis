@@ -5,9 +5,15 @@ export async function mergeCachedUpdatedPages(
   cachePath: string,
   updatedPages: PageObjectResponse[]
 ) {
-  const cachedPages = JSON.parse(
-    await readFile(`${cachePath}/pages.json`, "utf-8")
-  ) as PageObjectResponse[];
+  let cachedPages: PageObjectResponse[] = [];
+
+  try {
+    await stat(`${cachePath}/pages.json`);
+
+    cachedPages = JSON.parse(
+      await readFile(`${cachePath}/pages.json`, "utf-8")
+    ) as PageObjectResponse[];
+  } catch (error) {}
 
   const cachedPagesIndex = cachedPages.reduce(
     (acc, page, index) => ({
