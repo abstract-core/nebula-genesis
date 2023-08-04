@@ -5,8 +5,6 @@ export function argsReception() {
     return acc;
   }, {} as { [key: string]: string });
 
-  console.log(process.argv);
-
   const notionToken = args["NOTION_TOKEN"];
   if (!notionToken) throw new Error("NOTION_TOKEN is not defined");
 
