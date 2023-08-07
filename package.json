@@ -1,6 +1,6 @@
 {
   "name": "nebula-genesis",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Download and cache workflow for Notion databases.",
   "main": "index.js",
   "scripts": {
