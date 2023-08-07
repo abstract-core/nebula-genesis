@@ -43,7 +43,7 @@ async function run() {
   await writeFile(`${cachePath}/pages.json`, JSON.stringify(pages), "utf-8");
 
   await createFolder(`${cachePath}/pages`);
-  await createFolder(`${cachePath}/images`);
+  await createFolder(`${siteFolderPath}/static`);
 
   Promise.all(
     updatedPages.map(async (page) => {
