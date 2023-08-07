@@ -31,5 +31,10 @@ export async function getCacheMetadata(
     "utf-8"
   );
 
-  return cachedMetadata || newCachedMetadata;
+  return (
+    cachedMetadata || {
+      ...newCachedMetadata,
+      ...(onOrAfter && { LAST_RUN: onOrAfter }),
+    }
+  );
 }
