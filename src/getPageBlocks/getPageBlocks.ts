@@ -20,11 +20,17 @@ export async function getPageBlocks(notion: Client, pageId: string) {
 
   console.log(`Found ${blocks.length} blocks`);
 
-  let images: ImageBlockObjectResponse[] = [];
+  let images: {
+    block: ImageBlockObjectResponse;
+    index: number;
+  }[] = [];
 
-  blocks.forEach((block) => {
+  blocks.forEach((block, index) => {
     if (block.type === "image") {
-      images.push(block as ImageBlockObjectResponse);
+      images.push({
+        block: block as ImageBlockObjectResponse,
+        index,
+      });
     }
   });
 
