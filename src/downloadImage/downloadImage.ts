@@ -3,8 +3,7 @@ import { writeFile } from "fs/promises";
 import fetch from "node-fetch";
 
 export async function downloadImage(
-  cachePath: string,
-  pageId: string,
+  imagesFolderPath: string,
   imageBlock: ImageBlockObjectResponse
 ) {
   if (imageBlock.type === "image" && imageBlock.image.type === "file") {
@@ -15,6 +14,8 @@ export async function downloadImage(
     const res = await fetch(imageUrl);
     const buffer = await res.buffer();
 
-    await writeFile(`${cachePath}/pages/${pageId}/${filename}`, buffer);
+    await writeFile(`${imagesFolderPath}/${filename}`, buffer);
+
+    return filename;
   }
 }
