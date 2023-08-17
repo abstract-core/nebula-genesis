@@ -22,11 +22,15 @@ export function argsReception() {
   const onOrAfter = args["ON_OR_AFTER"] || undefined;
   if (onOrAfter) console.log(`Querying override : ${onOrAfter}`);
 
+  const reinitCache = args["REINIT_CACHE"] || undefined;
+  if (onOrAfter) console.log("Cache reinitialization");
+
   return {
     notionToken,
     databaseId,
     siteFolderPath,
     cacheFolderName,
     onOrAfter,
+    reinitCache,
   };
 }

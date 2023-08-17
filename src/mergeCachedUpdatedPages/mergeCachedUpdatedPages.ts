@@ -15,18 +15,15 @@ export async function mergeCachedUpdatedPages(
     ) as PageObjectResponse[];
   } catch (error) {}
 
-  const cachedPagesIndex = cachedPages.reduce(
-    (acc, page, index) => ({
-      ...acc,
-      [page.id]: index,
-    }),
-    {} as Record<string, number>
-  );
+  const cachedPagesIndex = cachedPages.reduce((acc, page, index) => {
+    acc[page.id] = index;
+    return acc;
+  }, {} as Record<string, number>);
 
   const mergedPages = cachedPages.slice();
 
   updatedPages.forEach((page) => {
-    if (cachedPagesIndex[page.id]) {
+    if (typeof cachedPagesIndex[page.id] === "number") {
       mergedPages[cachedPagesIndex[page.id]] = page;
     } else {
       mergedPages.push(page);

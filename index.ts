@@ -20,6 +20,7 @@ async function run() {
     siteFolderPath,
     cacheFolderName,
     onOrAfter,
+    reinitCache,
   } = argsReception();
 
   const cachePath = `${siteFolderPath}/cache${
@@ -38,7 +39,9 @@ async function run() {
     LAST_RUN
   );
 
-  const pages = await mergeCachedUpdatedPages(cachePath, updatedPages);
+  const pages = reinitCache
+    ? updatedPages
+    : await mergeCachedUpdatedPages(cachePath, updatedPages);
 
   await writeFile(`${cachePath}/pages.json`, JSON.stringify(pages), "utf-8");
 
