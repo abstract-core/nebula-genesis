@@ -1,3 +1,5 @@
+import { PropertyFilter } from "../_types/PropertyFilter";
+
 export function argsReception() {
   const args = process.argv.reduce((acc, cur) => {
     const [key, value] = cur.split("=");
@@ -10,6 +12,13 @@ export function argsReception() {
 
   const databaseId = args["DATABASE_ID"];
   if (!databaseId) throw new Error("DATABASE_ID is not defined");
+
+  const filters = args["FILTERS"]
+    ? (JSON.parse(args["FILTERS"]) as PropertyFilter[])
+    : undefined;
+  if (filters) {
+    console.log(`Filters enabled : ${JSON.stringify(filters, null, 2)}`);
+  }
 
   const siteFolderPath = args["SITE_FOLDER_PATH"] || ".";
   if (siteFolderPath)
@@ -28,6 +37,7 @@ export function argsReception() {
   return {
     notionToken,
     databaseId,
+    filters,
     siteFolderPath,
     cacheFolderName,
     onOrAfter,

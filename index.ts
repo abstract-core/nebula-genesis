@@ -17,6 +17,7 @@ async function run() {
   const {
     notionToken,
     databaseId,
+    filters,
     siteFolderPath,
     cacheFolderName,
     onOrAfter,
@@ -36,7 +37,8 @@ async function run() {
   const updatedPages = await getDatabasePages(
     notionClient,
     databaseId,
-    LAST_RUN
+    reinitCache ? undefined : LAST_RUN,
+    filters
   );
 
   const pages = reinitCache
