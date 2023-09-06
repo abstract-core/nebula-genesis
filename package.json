@@ -1,9 +1,12 @@
 {
   "name": "nebula-genesis",
-  "version": "1.1.0",
+  "version": "1.2.2",
   "description": "Download and cache workflow for Notion databases.",
-  "main": "index.js",
+  "main": "/build",
+  "bin": "/build/index.js",
   "scripts": {
+    "dev": "npx tsc --build --watch",
+    "build": "npx tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
