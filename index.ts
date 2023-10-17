@@ -76,7 +76,7 @@ async function run() {
               };
               caption: Array<RichTextItemResponse>;
             }
-          ).file.url = `./${filename}`;
+          ).file.url = `/${filename}`;
         })
       );
 
