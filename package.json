@@ -21,6 +21,8 @@
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.7",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.1.6"
   }
 }

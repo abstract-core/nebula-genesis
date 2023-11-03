@@ -1,7 +1,7 @@
 import { PropertyFilter } from "../_types/PropertyFilter";
 
-export function argsReception() {
-  const args = process.argv.reduce((acc, cur) => {
+export function argsReception(argv: NodeJS.Process["argv"]) {
+  const args = argv.reduce((acc, cur) => {
     const [key, value] = cur.split("=");
     acc[key] = value;
     return acc;
