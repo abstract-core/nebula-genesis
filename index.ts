@@ -1,5 +1,5 @@
 import { Client } from "@notionhq/client";
-import { argsReception } from "./src/argsReception/argsReception";
+import { parseArguments } from "./src/parseArguments/parseArguments";
 import { createFolder } from "./src/createFolder/createFolder";
 import { getCacheMetadata } from "./src/getCacheMetadata/getCacheMetadata";
 import { getDatabasePages } from "./src/getDatabasePages/getDatabasePages";
@@ -22,7 +22,7 @@ async function run() {
     cacheFolderName,
     onOrAfter,
     reinitCache,
-  } = argsReception();
+  } = parseArguments(process.argv);
 
   const cachePath = `${siteFolderPath}/cache${
     cacheFolderName ? `/${cacheFolderName}` : ""
