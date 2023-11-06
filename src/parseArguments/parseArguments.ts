@@ -21,7 +21,7 @@ export function parseArguments(argv: NodeJS.Process["argv"]) {
   }
 
   const siteFolderPath = args["SITE_FOLDER_PATH"] || ".";
-  if (siteFolderPath)
+  if (siteFolderPath !== ".")
     console.log(`Site folder path override : ${siteFolderPath}`);
 
   const cacheFolderName = args["CACHE_FOLDER_NAME"] || undefined;
@@ -31,7 +31,7 @@ export function parseArguments(argv: NodeJS.Process["argv"]) {
   const onOrAfter = args["ON_OR_AFTER"] || undefined;
   if (onOrAfter) console.log(`Querying override : ${onOrAfter}`);
 
-  const reinitCache = args["REINIT_CACHE"] || undefined;
+  const reinitCache = args["REINIT_CACHE"] ? true : undefined;
   if (onOrAfter) console.log("Cache reinitialization");
 
   return {
