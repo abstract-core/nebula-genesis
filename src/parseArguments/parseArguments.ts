@@ -1,6 +1,7 @@
+import { ArgsOptions } from "../_types/ArgsOptions";
 import { PropertyFilter } from "../_types/PropertyFilter";
 
-export function parseArguments(argv: NodeJS.Process["argv"]) {
+export function parseArguments(argv: NodeJS.Process["argv"]): ArgsOptions {
   const args = argv.reduce((acc, cur) => {
     const [key, value] = cur.split("=");
     acc[key] = value;
@@ -34,6 +35,9 @@ export function parseArguments(argv: NodeJS.Process["argv"]) {
   const reinitCache = args["REINIT_CACHE"] ? true : undefined;
   if (onOrAfter) console.log("Cache reinitialization");
 
+  const outputFormat = args["OUTPUT_FORMAT"] as "md" | "json" || "md";
+  console.log(`Output format : ${outputFormat}`);
+
   return {
     notionToken,
     databaseId,
@@ -42,5 +46,6 @@ export function parseArguments(argv: NodeJS.Process["argv"]) {
     cacheFolderName,
     onOrAfter,
     reinitCache,
+    outputFormat
   };
 }
