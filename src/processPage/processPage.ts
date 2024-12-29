@@ -1,16 +1,28 @@
 import { Client } from "@notionhq/client";
 import { writeFile } from "fs/promises";
-import { ImageBlockObjectResponse, PageObjectResponse, RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
+import {
+  ImageBlockObjectResponse,
+  PageObjectResponse,
+  RichTextItemResponse,
+} from "@notionhq/client/build/src/api-endpoints";
 import { getPageBlocks } from "./getPageBlocks/getPageBlocks";
 import { createFolder } from "./createFolder/createFolder";
 import { downloadFiles } from "./downloadFiles/downloadFiles";
 import { downloadImage } from "./downloadImage/downloadImage";
 import { ArgsOptions } from "../_types/ArgsOptions";
+import { parseToMarkdown } from "./blocksToMarkdown/blocksToMarkdown";
 
 export async function processPage(
   notionClient: Client,
   page: PageObjectResponse,
-  { cachePath, siteFolderPath }: {cachePath: string} & Pick<ArgsOptions, "siteFolderPath">,
+  {
+    cachePath,
+    siteFolderPath,
+    outputFormat,
+  }: { cachePath: string } & Pick<
+    ArgsOptions,
+    "siteFolderPath" | "outputFormat"
+  >
 ) {
   const { blocks, images } = await getPageBlocks(notionClient, page.id);
 
@@ -22,10 +34,7 @@ export async function processPage(
     images.map(async ({ block, index }) => {
       console.log(`Downloading ${block.id} from ${page.id}`);
 
-      const filename = await downloadImage(
-        `${siteFolderPath}/static`,
-        block
-      );
+      const filename = await downloadImage(`${siteFolderPath}/static`, block);
 
       (
         (blocks[index] as ImageBlockObjectResponse).image as {
@@ -40,9 +49,23 @@ export async function processPage(
     })
   );
 
-  await writeFile(
-    `${cachePath}/pages/${page.id}/page.json`,
-    JSON.stringify(blocks),
-    "utf-8"
-  );
+  console.log(outputFormat);
+  if (outputFormat === "md") {
+    await writeFile(
+      `${cachePath}/pages/${page.id}/page.md`,
+      parseToMarkdown(
+        page.properties["Title"].type === "title"
+          ? page.properties["Title"].title[0].plain_text
+          : "",
+        blocks
+      ),
+      "utf-8"
+    );
+  } else {
+    await writeFile(
+      `${cachePath}/pages/${page.id}/page.json`,
+      JSON.stringify(blocks),
+      "utf-8"
+    );
+  }
 }

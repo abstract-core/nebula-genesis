@@ -2,9 +2,23 @@
 
 `nebula-genesis` is part of the **Nebula** suite.
 
-> Nebula connects Notion API and GatsbyJS to automatically create static websites.
+> Nebula connects Notion API and Astro to automatically create static websites.
 
 Nebula Genesis acts prior to the website generation, by **querying and caching Notion data and files**.
+
+## Table of contents
+
+- [How to use](#how-to-use)
+- [Download folder](#download-folder)
+- [Arguments](#arguments)
+  - [Notion token](#notion-token) (required)
+  - [Database ID](#database-id) (required)
+  - [Filters](#filters)
+  - [Site folder path](#site-folder-path)
+  - [Cache folder name](#cache-folder-name)
+  - [On or after](#on-or-after)
+  - [Reinit cache](#reinit-cache)
+  - [Output format](#output-format)
 
 ## How to use
 
@@ -27,7 +41,7 @@ This will download content in a `cache` folder, as detailed in [Download folder]
 Required and optional arguments are detailed in the [Arguments](#arguments) section.
 
 ```bash
-node node_modules/nebula-genesis/index.js [...args]
+npx nebula-genesis [...args]
 ```
 
 ## Download folder
@@ -38,7 +52,7 @@ Queryied content will be stored at the following location :
 
 > <[SITE_FOLDER_PATH](#sitefolderpath)>/cache/<[CACHE_FOLDER_NAME](#cachefoldername)>
 
-Files from pages' blocks are directly stored inside `./static` folder.
+Files (like images)from pages' blocks are directly stored inside `./static` folder.
 
 Don't forget to ignore cached files from `./static`.
 
@@ -93,3 +107,7 @@ See [Download location](#download-location) section for cache folder path.
 #### REINIT_CACHE
 
 `REINIT_CACHE` can be set with whatever value to ignore cache.
+
+#### OUTPUT_FORMAT
+
+`OUTPUT_FORMAT` can either be `'md'` (default) or "`json`".

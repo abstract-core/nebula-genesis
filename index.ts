@@ -16,7 +16,7 @@ async function run() {
     cacheFolderName,
     onOrAfter,
     reinitCache,
-    outputFormat
+    outputFormat,
   } = parseArguments(process.argv);
 
   const cachePath = `${siteFolderPath}/cache${
@@ -46,7 +46,13 @@ async function run() {
   await createFolder(`${siteFolderPath}/static`);
 
   await Promise.all(
-    updatedPages.map((page) => processPage(notionClient, page, {cachePath, siteFolderPath}))
+    updatedPages.map((page) =>
+      processPage(notionClient, page, {
+        cachePath,
+        siteFolderPath,
+        outputFormat,
+      })
+    )
   );
 
   console.log("Done!");
