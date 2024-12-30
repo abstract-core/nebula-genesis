@@ -9,4 +9,5 @@ export type ArgsOptions = {
   onOrAfter?: string;
   reinitCache?: boolean;
   outputFormat?: string;
-}
+  astroCollectionName?: string;
+};

@@ -35,8 +35,12 @@ export function parseArguments(argv: NodeJS.Process["argv"]): ArgsOptions {
   const reinitCache = args["REINIT_CACHE"] ? true : undefined;
   if (onOrAfter) console.log("Cache reinitialization");
 
-  const outputFormat = args["OUTPUT_FORMAT"] as "md" | "json" || "md";
+  const outputFormat = (args["OUTPUT_FORMAT"] as "md" | "json") || "md";
   console.log(`Output format : ${outputFormat}`);
+
+  const astroCollectionName = args["ASTRO_COLLECTION_NAME"] || undefined;
+  if (astroCollectionName)
+    console.log(`Astro collection name : ${astroCollectionName}`);
 
   return {
     notionToken,
@@ -46,6 +50,7 @@ export function parseArguments(argv: NodeJS.Process["argv"]): ArgsOptions {
     cacheFolderName,
     onOrAfter,
     reinitCache,
-    outputFormat
+    outputFormat,
+    astroCollectionName,
   };
 }

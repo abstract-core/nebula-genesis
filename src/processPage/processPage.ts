@@ -19,9 +19,10 @@ export async function processPage(
     cachePath,
     siteFolderPath,
     outputFormat,
+    astroCollectionName,
   }: { cachePath: string } & Pick<
     ArgsOptions,
-    "siteFolderPath" | "outputFormat"
+    "siteFolderPath" | "outputFormat" | "astroCollectionName"
   >
 ) {
   const { blocks, images } = await getPageBlocks(notionClient, page.id);
@@ -49,16 +50,19 @@ export async function processPage(
     })
   );
 
-  console.log(outputFormat);
   if (outputFormat === "md") {
+    const title =
+      page.properties["Title"].type === "title"
+        ? page.properties["Title"].title[0].plain_text
+        : "Sans titre";
     await writeFile(
-      `${cachePath}/pages/${page.id}/page.md`,
-      parseToMarkdown(
-        page.properties["Title"].type === "title"
-          ? page.properties["Title"].title[0].plain_text
-          : "",
-        blocks
-      ),
+      astroCollectionName
+        ? `${siteFolderPath}/src/pages/${astroCollectionName}/${title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "")}.md`
+        : `${cachePath}/pages/${page.id}/page.md`,
+      parseToMarkdown(title, blocks),
       "utf-8"
     );
   } else {
