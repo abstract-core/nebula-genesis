@@ -44,7 +44,9 @@ async function run() {
   await writeFile(`${cachePath}/pages.json`, JSON.stringify(pages), "utf-8");
 
   await createFolder(`${cachePath}/pages`);
-  await createFolder(`${siteFolderPath}/static`);
+  if (astroCollectionName)
+    await createFolder(`${siteFolderPath}/src/pages/${astroCollectionName}`);
+  else await createFolder(`${siteFolderPath}/static`);
 
   await Promise.all(
     updatedPages.map((page) =>

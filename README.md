@@ -111,3 +111,9 @@ See [Download location](#download-location) section for cache folder path.
 #### OUTPUT_FORMAT
 
 `OUTPUT_FORMAT` can either be `'md'` (default) or "`json`".
+
+#### ASTRO_COLLECTION_NAME
+
+`ASTRO_COLLECTION_NAME` will write MD files in an Astro-shaped folder, structured as `/pages/<name>/<page-slug>.md`.
+
+_Collections can then be set in website codesource, using `src/content.config.ts`_

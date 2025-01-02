@@ -29,13 +29,19 @@ export async function processPage(
 
   await createFolder(`${cachePath}/pages/${page.id}`);
 
-  await downloadFiles(page, `${siteFolderPath}/static`);
+  await downloadFiles(
+    page,
+    `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`
+  );
 
   await Promise.all(
     images.map(async ({ block, index }) => {
       console.log(`Downloading ${block.id} from ${page.id}`);
 
-      const filename = await downloadImage(`${siteFolderPath}/static`, block);
+      const filename = await downloadImage(
+        `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`,
+        block
+      );
 
       (
         (blocks[index] as ImageBlockObjectResponse).image as {
@@ -52,16 +58,25 @@ export async function processPage(
 
   if (outputFormat === "md") {
     const title =
-      page.properties["Title"].type === "title"
-        ? page.properties["Title"].title[0].plain_text
+      page.properties["Name"].type === "title"
+        ? page.properties["Name"].title[0].plain_text
         : "Sans titre";
     await writeFile(
       astroCollectionName
-        ? `${siteFolderPath}/src/pages/${astroCollectionName}/${title
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/(^-|-$)/g, "")}.md`
-        : `${cachePath}/pages/${page.id}/page.md`,
+        ? `${siteFolderPath}/src/pages/${astroCollectionName}/${
+            title
+              ?.toLowerCase()
+              .replace("à", "a")
+              .replace("é", "e")
+              .replace("è", "e")
+              .replace("ê", "e")
+              .replace("ï", "i")
+              .replace("ô", "o")
+              .replace("û", "u")
+              .replace(/[^a-z0-9]+/g, "-")
+              .replace(/(^-|-$)/g, "") || page.id
+          }.md`
+        : `${cachePath}/pages/${page.id}.md`,
       parseToMarkdown(title, blocks),
       "utf-8"
     );
