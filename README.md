@@ -117,3 +117,27 @@ See [Download location](#download-location) section for cache folder path.
 `ASTRO_COLLECTION_NAME` will write MD files in an Astro-shaped folder, structured as `/pages/<name>/<page-slug>.md`.
 
 _Collections can then be set in website codesource, using `src/content.config.ts`_
+
+## Notion's features support
+
+### Blocks types' support
+
+- Paragraph
+- Heading 1
+- Heading 2
+- Heading 3
+- Bulleted list item
+- Numbered list item
+- Quote
+- Callout
+- Image
+
+### Property types' support
+
+- rich_text
+- title
+- number
+- date
+- checkbox
+- select
+- multi_select

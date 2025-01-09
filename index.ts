@@ -45,7 +45,7 @@ async function run() {
 
   await createFolder(`${cachePath}/pages`);
   if (astroCollectionName)
-    await createFolder(`${siteFolderPath}/src/pages/${astroCollectionName}`);
+    await createFolder(`${siteFolderPath}/src/data/${astroCollectionName}`);
   else await createFolder(`${siteFolderPath}/static`);
 
   await Promise.all(
