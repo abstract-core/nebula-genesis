@@ -1,17 +1,11 @@
 import { Client } from "@notionhq/client";
 import { parseArguments } from "./src/parseArguments/parseArguments";
-import { createFolder } from "./src/createFolder/createFolder";
+import { createFolder } from "./src/processPage/createFolder/createFolder";
 import { getCacheMetadata } from "./src/getCacheMetadata/getCacheMetadata";
 import { getDatabasePages } from "./src/getDatabasePages/getDatabasePages";
 import { writeFile } from "fs/promises";
 import { mergeCachedUpdatedPages } from "./src/mergeCachedUpdatedPages/mergeCachedUpdatedPages";
-import { getPageBlocks } from "./src/getPageBlocks/getPageBlocks";
-import { downloadImage } from "./src/downloadImage/downloadImage";
-import {
-  ImageBlockObjectResponse,
-  RichTextItemResponse,
-} from "@notionhq/client/build/src/api-endpoints";
-import { downloadFiles } from "./src/downloadFiles/downloadFiles";
+import { processPage } from "./src/processPage/processPage";
 
 async function run() {
   const {
@@ -22,6 +16,8 @@ async function run() {
     cacheFolderName,
     onOrAfter,
     reinitCache,
+    outputFormat,
+    astroCollectionName,
   } = parseArguments(process.argv);
 
   const cachePath = `${siteFolderPath}/cache${
@@ -48,45 +44,22 @@ async function run() {
   await writeFile(`${cachePath}/pages.json`, JSON.stringify(pages), "utf-8");
 
   await createFolder(`${cachePath}/pages`);
-  await createFolder(`${siteFolderPath}/static`);
+  if (astroCollectionName)
+    await createFolder(`${siteFolderPath}/src/data/${astroCollectionName}`);
+  else await createFolder(`${siteFolderPath}/static`);
 
-  Promise.all(
-    updatedPages.map(async (page) => {
-      const { blocks, images } = await getPageBlocks(notionClient, page.id);
-
-      await createFolder(`${cachePath}/pages/${page.id}`);
-
-      await downloadFiles(page, `${siteFolderPath}/static`);
-
-      await Promise.all(
-        images.map(async ({ block, index }) => {
-          console.log(`Downloading ${block.id} from ${page.id}`);
-
-          const filename = await downloadImage(
-            `${siteFolderPath}/static`,
-            block
-          );
-
-          (
-            (blocks[index] as ImageBlockObjectResponse).image as {
-              type: "file";
-              file: {
-                url: string;
-                expiry_time: string;
-              };
-              caption: Array<RichTextItemResponse>;
-            }
-          ).file.url = `/${filename}`;
-        })
-      );
-
-      await writeFile(
-        `${cachePath}/pages/${page.id}/page.json`,
-        JSON.stringify(blocks),
-        "utf-8"
-      );
-    })
+  await Promise.all(
+    updatedPages.map((page) =>
+      processPage(notionClient, page, {
+        cachePath,
+        siteFolderPath,
+        outputFormat,
+        astroCollectionName,
+      })
+    )
   );
+
+  console.log("Done!");
 }
 
 run();
