@@ -1,14 +1,15 @@
 {
   "name": "nebula-genesis",
-  "version": "1.2.3",
-  "description": "Download and cache workflow for Notion databases.",
-  "main": "/build",
-  "bin": "/build/index.js",
+  "version": "2.0.0",
+  "description": "Fetch, cache and parse to MD, pages from Notion databases.",
+  "main": "index.ts",
+  "bin": {
+    "genesis": "./build/index.js"
+  },
   "scripts": {
     "start": "node build/index.js",
     "dev": "npx esbuild --watch --bundle --platform=node --outfile=build/index.js index.ts",
-    "build": "npx esbuild --outfile=build/index.js index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx esbuild --bundle --platform=node --outfile=build/index.js index.ts"
   },
   "keywords": [
     "notion",

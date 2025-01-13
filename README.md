@@ -1,26 +1,51 @@
 # Nebula Genesis
 
-`nebula-genesis` is part of the **Nebula** suite.
+> `nebula-genesis` is part of the [**Nebula**](nebula.rimarok.com) suite.
 
-> Nebula connects Notion API and Astro to automatically create static websites.
+Nebula connects [Notion API](developers.notion.com/) (as headless CMS) and [Astro](astro.build/) (a SSG, static site generator) to automatically create static websites.
 
-Nebula Genesis acts prior to the website generation, by **querying and caching Notion data and files**.
+**Nebula Genesis acts prior to the website generation** :
+
+It's a npm module that query, download, cache and (optionnaly) parse Notion databases' pages to Markdown.
 
 ## Table of contents
 
-- [How to use](#how-to-use)
-- [Download folder](#download-folder)
-- [Arguments](#arguments)
-  - [Notion token](#notion-token) (required)
-  - [Database ID](#database-id) (required)
-  - [Filters](#filters)
-  - [Site folder path](#site-folder-path)
-  - [Cache folder name](#cache-folder-name)
-  - [On or after](#on-or-after)
-  - [Reinit cache](#reinit-cache)
-  - [Output format](#output-format)
+- [Nebula Genesis](#nebula-genesis)
+  - [Table of contents](#table-of-contents)
+  - [How to use ?](#how-to-use-)
+    - [1. Install](#1-install)
+    - [2. Querying](#2-querying)
+  - [Where is data downloaded ?](#where-is-data-downloaded-)
+    - [Download location](#download-location)
+      - [1. Cache folder](#1-cache-folder)
+      - [2. Astro collection folder](#2-astro-collection-folder)
+    - [Folder structure](#folder-structure)
+  - [Arguments](#arguments)
+    - [Required arguments](#required-arguments)
+      - [NOTION\_TOKEN](#notion_token)
+      - [DATABASE\_ID](#database_id)
+    - [Optional arguments](#optional-arguments)
+      - [FILTERS](#filters)
+      - [SITE\_FOLDER\_PATH](#site_folder_path)
+      - [CACHE\_FOLDER\_NAME](#cache_folder_name)
+      - [ON\_OR\_AFTER](#on_or_after)
+      - [REINIT\_CACHE](#reinit_cache)
+      - [OUTPUT\_FORMAT](#output_format)
+      - [ASTRO\_COLLECTION\_NAME](#astro_collection_name)
+  - [Notion's features support](#notions-features-support)
+    - [Blocks types' support](#blocks-types-support)
+    - [Property types' support](#property-types-support)
+  - [Development](#development)
+    - [1. Clone repo on your computer](#1-clone-repo-on-your-computer)
+    - [2. Install dependencies](#2-install-dependencies)
+    - [3. Build dev script](#3-build-dev-script)
+    - [4. Install in test site](#4-install-in-test-site)
+  - [Publishing](#publishing)
+    - [1. Build prod script](#1-build-prod-script)
+    - [2. Publish on npm](#2-publish-on-npm)
 
-## How to use
+
+## How to use ?
 
 ### 1. Install
 
@@ -30,29 +55,40 @@ Install `nebula-genesis` as a dev dependency in your website project.
 npm i -D nebula-genesis
 ```
 
-### 2. Run
+### 2. Querying
 
 Query databases and pages according to your needs.
 
-It is a normal use case to run 2 or more times `nebula-genesis`, with different [`CACHE_FOLDER_NAME`](#cachefoldername), to fetch content from mutiple databases or varying filters.
+It is a normal use case to run 2 or more times `nebula-genesis`, with different [`CACHE_FOLDER_NAME`](#cachefoldername), to fetch content from mutiple databases or with differents filters.
 
-This will download content in a `cache` folder, as detailed in [Download folder](#download-folder) section.
+This will download content in a `cache` folder, as detailed in [Where is data downloaded ?](#where-is-data-downloaded-) section.
 
 Required and optional arguments are detailed in the [Arguments](#arguments) section.
 
 ```bash
-npx nebula-genesis [...args]
+npx genesis [...args]
 ```
 
-## Download folder
+## Where is data downloaded ?
 
 ### Download location
 
-Queryied content will be stored at the following location :
+Depending on [arguments], content will be stored at different locations.
 
-> <[SITE_FOLDER_PATH](#sitefolderpath)>/cache/<[CACHE_FOLDER_NAME](#cachefoldername)>
+#### 1. Cache folder
 
-Files (like images)from pages' blocks are directly stored inside `./static` folder.
+By default, content is stored in a cache folder, located at :
+
+> [<SITE_FOLDER_PATH>](#sitefolderpath)/cache/[<CACHE_FOLDER_NAME>](#cachefoldername)
+
+#### 2. Astro collection folder
+
+If [<ASTRO_COLLECTION_NAME>](#astrocollectionname) is set,
+pages are downloaded and parsed to the following location :
+
+> [<SITE_FOLDER_PATH>](#sitefolderpath)/src/data[<ASTRO_COLLECTION_NAME>](#astrocollectionname)
+
+Files (like images) from pages' blocks are directly stored inside [`<SITE_FOLDER_PATH>`](#sitefolderpath)`/static` folder.
 
 Don't forget to ignore cached files from `./static`.
 
@@ -141,3 +177,41 @@ _Collections can then be set in website codesource, using `src/content.config.ts
 - checkbox
 - select
 - multi_select
+
+## Development
+
+You can extend `nebula-genesis`'s features by locally developing its codebase, following these steps :
+
+### 1. Clone repo on your computer
+
+> `git clone github.com/abstract-core/nebula-genesis.git`
+
+We find it esaier to clone sources in the same folder as the Astro test site project you will use (ex: in `dev/` you'll find `nebula-genesis/` and `my-astro-project/`).
+
+### 2. Install dependencies
+
+> `npm i`
+
+### 3. Build dev script
+
+> `npm run dev`
+
+In order to transpile (from TS to JS), and to bundle files in a single script, we use `npx esbuild` to output a `build/index.js`.
+
+This script has the `watch` flag turned on.
+
+### 4. Install in test site
+
+Taking the [1. Clone repo on your computer](#1-clone-repo-on-your-computer) example folder structure, you should execute the following script to install dev module in your test site :
+
+> `npm i ../nebula-genesis`
+
+## Publishing
+
+### 1. Build prod script
+
+> `npm run build`
+
+### 2. Publish on npm
+
+> `npm publish`
