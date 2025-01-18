@@ -1,6 +1,5 @@
 import { ImageBlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { writeFile } from "fs/promises";
-import fetch from "node-fetch";
 import sharp from "sharp";
 
 export async function downloadImage(
@@ -13,7 +12,7 @@ export async function downloadImage(
     const filename = imageUrl.split("?")[0].split("/").pop() || "";
 
     const res = await fetch(imageUrl);
-    const buffer = await res.buffer();
+    const buffer = await res.arrayBuffer();
 
     // Get image metadata and resize if needed
     const metadata = await sharp(buffer).metadata();
@@ -26,7 +25,10 @@ export async function downloadImage(
             .toBuffer()
         : buffer;
 
-    await writeFile(`${imagesFolderPath}/${filename}`, finalBuffer);
+    await writeFile(
+      `${imagesFolderPath}/${filename}`,
+      new Uint8Array(finalBuffer)
+    );
 
     return filename;
   }

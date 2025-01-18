@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Client } from "@notionhq/client";
 import { parseArguments } from "./src/parseArguments/parseArguments";
 import { createFolder } from "./src/processPage/createFolder/createFolder";
