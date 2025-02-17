@@ -23,6 +23,8 @@ export function blockMarkdownSwitch(block: BlockObjectResponse) {
         : ""
     } ${richTextToMarkdown(block.callout.rich_text)}`;
   if (block.type === "image") {
-    return block.image.type === "file" ? `![](${block.image.file.url})` : "";
+    return block.image.type === "file"
+      ? `![${richTextToMarkdown(block.image.caption)}](${block.image.file.url})`
+      : "";
   }
 }
