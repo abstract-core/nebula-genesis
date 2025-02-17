@@ -5,6 +5,7 @@ export function richTextToMarkdown(richTexts: RichTextItemResponse[]) {
     .map((richText) => {
       if (richText.type === "text") {
         let text = richText.text.content;
+        if (richText.href) text = `[${text}](${richText.href})`;
         if (richText.annotations.bold) text = "**" + text + "**";
         if (richText.annotations.italic) text = "*" + text + "*";
         if (richText.annotations.strikethrough) text = "~~" + text + "~~";
