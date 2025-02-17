@@ -44,7 +44,6 @@ It's a npm module that query, download, cache and (optionnaly) parse Notion data
     - [1. Build prod script](#1-build-prod-script)
     - [2. Publish on npm](#2-publish-on-npm)
 
-
 ## How to use ?
 
 ### 1. Install
@@ -61,7 +60,7 @@ Query databases and pages according to your needs.
 
 It is a normal use case to run 2 or more times `nebula-genesis`, with different [`CACHE_FOLDER_NAME`](#cachefoldername), to fetch content from mutiple databases or with differents filters.
 
-This will download content in a `cache` folder, as detailed in [Where is data downloaded ?](#where-is-data-downloaded-) section.
+This will download content in a `cache` folder, as detailed in [Download folder](#download-folder) section.
 
 Required and optional arguments are detailed in the [Arguments](#arguments) section.
 
