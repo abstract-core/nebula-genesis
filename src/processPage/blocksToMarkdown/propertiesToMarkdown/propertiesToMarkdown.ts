@@ -15,9 +15,9 @@ ${Object.entries(properties)
   .map(([key, property]) => {
     return `${key}: ${
       (property.type === "rich_text"
-        ? richTextToMarkdown(property.rich_text)
+        ? richTextToMarkdown(property.rich_text).replace(/ : /g, " ")
         : property.type === "title"
-        ? `${richTextToMarkdown(property.title)}`
+        ? `${richTextToMarkdown(property.title).replace(/ : /g, " ")}`
         : property.type === "number"
         ? property.number
         : property.type === "checkbox"
@@ -31,12 +31,12 @@ ${Object.entries(properties)
           ? `\n- ${property.multi_select
               .map((option) => option.name)
               .join("\n- ")}`
-          : "undefined"
+          : ""
         : property.type === "status"
         ? property.status?.name
         : property.type === "date"
         ? property.date?.start
-        : "???") || "undefined"
+        : "???") || ""
     }`;
   })
   .join("\n")}
