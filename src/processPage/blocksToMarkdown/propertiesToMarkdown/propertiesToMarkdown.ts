@@ -15,9 +15,9 @@ ${Object.entries(properties)
   .map(([key, property]) => {
     return `${key}: ${
       (property.type === "rich_text"
-        ? richTextToMarkdown(property.rich_text).replace(/ : /g, " ")
+        ? richTextToMarkdown(property.rich_text).replace(/\s*:\s*/g, " ")
         : property.type === "title"
-        ? `${richTextToMarkdown(property.title).replace(/ : /g, " ")}`
+        ? `${richTextToMarkdown(property.title).replace(/\s*:\s*/g, " ")}`
         : property.type === "number"
         ? property.number
         : property.type === "checkbox"
