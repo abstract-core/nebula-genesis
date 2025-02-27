@@ -6,7 +6,7 @@ export function propertiesToMarkdown(
   properties: PageObjectResponse["properties"]
 ) {
   return `---
-slug: ${
+Slug: ${
     properties["Name"]?.type === "title"
       ? stringToUrl(properties["Name"].title[0].plain_text)
       : ""
