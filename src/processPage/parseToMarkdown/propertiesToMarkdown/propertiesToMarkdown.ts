@@ -1,6 +1,6 @@
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { richTextToMarkdown } from "../richTextToMarkdown/richTextToMarkdown";
-import { stringToUrl } from "../../stringToUrl/titleToUrl";
+import { stringToUrl } from "../../../stringToUrl.ts/stringToUrl";
 
 export function propertiesToMarkdown(
   properties: PageObjectResponse["properties"]

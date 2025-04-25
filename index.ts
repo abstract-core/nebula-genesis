@@ -7,6 +7,10 @@ import { getDatabasePages } from "./src/getDatabasePages/getDatabasePages";
 import { writeFile } from "fs/promises";
 import { mergeCachedUpdatedPages } from "./src/mergeCachedUpdatedPages/mergeCachedUpdatedPages";
 import { processPage } from "./src/processPage/processPage";
+import { richTextToString } from "./src/richTextToString/richTextToString";
+import { richTextToMarkdown } from "./src/processPage/parseToMarkdown/richTextToMarkdown/richTextToMarkdown";
+import { stringToUrl } from "./src/stringToUrl.ts/stringToUrl";
+import { PageSummary } from "./src/_types/PageSummary";
 
 async function run() {
   const {
@@ -49,14 +53,33 @@ async function run() {
     await createFolder(`${siteFolderPath}/src/data/${astroCollectionName}`);
   else await createFolder(`${siteFolderPath}/static`);
 
-  await Promise.all(
-    updatedPages.map((page) =>
-      processPage(notionClient, page, {
+  const pagesSummary = pages.reduce((acc, page) => {
+    const title =
+      page.properties["Name"].type === "title"
+        ? richTextToString(page.properties["Name"].title)
+        : "Sans titre";
+    acc[page.id.replaceAll("-", "")] = {
+      title,
+      slug:
+        page.properties["Url"].type === "rich_text" &&
+        page.properties["Url"].rich_text.length
+          ? richTextToMarkdown(page.properties["Url"].rich_text)
+          : `/${stringToUrl(title)}`,
+    };
+    return acc;
+  }, {} as { [id: string]: PageSummary });
+
+  pages.map((page) =>
+    processPage(
+      notionClient,
+      page,
+      {
         cachePath,
         siteFolderPath,
         outputFormat,
         astroCollectionName,
-      })
+      },
+      pagesSummary
     )
   );
 
