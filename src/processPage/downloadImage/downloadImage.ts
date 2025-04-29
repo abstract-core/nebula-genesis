@@ -4,7 +4,8 @@ import sharp from "sharp";
 
 export async function downloadImage(
   imagesFolderPath: string,
-  imageBlock: ImageBlockObjectResponse
+  imageBlock: ImageBlockObjectResponse,
+  containerWidth: number
 ) {
   if (imageBlock.type === "image" && imageBlock.image.type === "file") {
     const imageUrl = imageBlock.image.file.url;
@@ -18,10 +19,10 @@ export async function downloadImage(
     const metadata = await sharp(buffer).metadata();
 
     const finalBuffer =
-      metadata.width && metadata.width > 600
+      metadata.width && metadata.width > containerWidth
         ? await sharp(buffer)
             .rotate()
-            .resize(600, null, { withoutEnlargement: true })
+            .resize(containerWidth, null, { withoutEnlargement: true })
             .toBuffer()
         : buffer;
 

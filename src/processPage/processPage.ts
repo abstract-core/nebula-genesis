@@ -21,9 +21,10 @@ export async function processPage(
     siteFolderPath,
     outputFormat,
     astroCollectionName,
+    containerWidth,
   }: { cachePath: string } & Pick<
     ArgsOptions,
-    "siteFolderPath" | "outputFormat" | "astroCollectionName"
+    "siteFolderPath" | "outputFormat" | "astroCollectionName" | "containerWidth"
   >,
   pageSummary: { [id: string]: PageSummary }
 ) {
@@ -42,7 +43,8 @@ export async function processPage(
 
       const filename = await downloadImage(
         `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`,
-        block
+        block,
+        containerWidth
       );
 
       (

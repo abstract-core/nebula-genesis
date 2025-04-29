@@ -23,6 +23,7 @@ async function run() {
     reinitCache,
     outputFormat,
     astroCollectionName,
+    containerWidth,
   } = parseArguments(process.argv);
 
   const cachePath = `${siteFolderPath}/cache${
@@ -78,6 +79,7 @@ async function run() {
         siteFolderPath,
         outputFormat,
         astroCollectionName,
+        containerWidth,
       },
       pagesSummary
     )
