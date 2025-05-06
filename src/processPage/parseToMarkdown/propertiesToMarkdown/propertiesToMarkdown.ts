@@ -1,12 +1,12 @@
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { richTextToMarkdown } from "../richTextToMarkdown/richTextToMarkdown";
-import { stringToUrl } from "../../stringToUrl/titleToUrl";
+import { stringToUrl } from "../../../stringToUrl.ts/stringToUrl";
 
 export function propertiesToMarkdown(
   properties: PageObjectResponse["properties"]
 ) {
   return `---
-slug: ${
+Slug: ${
     properties["Name"]?.type === "title"
       ? stringToUrl(properties["Name"].title[0].plain_text)
       : ""
@@ -14,10 +14,10 @@ slug: ${
 ${Object.entries(properties)
   .map(([key, property]) => {
     return `${key}: ${
-      property.type === "rich_text"
-        ? richTextToMarkdown(property.rich_text)
+      (property.type === "rich_text"
+        ? richTextToMarkdown(property.rich_text).replace(/\s*:\s*/g, " ")
         : property.type === "title"
-        ? `"${richTextToMarkdown(property.title)}"`
+        ? `${richTextToMarkdown(property.title).replace(/\s*:\s*/g, " ")}`
         : property.type === "number"
         ? property.number
         : property.type === "checkbox"
@@ -36,7 +36,7 @@ ${Object.entries(properties)
         ? property.status?.name
         : property.type === "date"
         ? property.date?.start
-        : "???"
+        : "???") || ""
     }`;
   })
   .join("\n")}

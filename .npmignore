@@ -1,8 +1,5 @@
 node_modules
-src/*
-.env
 .gitignore
-index.ts
 jest.config.js
 package-lock.json
 package.json

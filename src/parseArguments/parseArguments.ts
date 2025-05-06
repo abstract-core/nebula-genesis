@@ -42,6 +42,10 @@ export function parseArguments(argv: NodeJS.Process["argv"]): ArgsOptions {
   if (astroCollectionName)
     console.log(`Astro collection name : ${astroCollectionName}`);
 
+  const containerWidth = args["CONTAINER_WIDTH"]
+    ? parseInt(args["CONTAINER_WIDTH"])
+    : 600;
+
   return {
     notionToken,
     databaseId,
@@ -52,5 +56,6 @@ export function parseArguments(argv: NodeJS.Process["argv"]): ArgsOptions {
     reinitCache,
     outputFormat,
     astroCollectionName,
+    containerWidth,
   };
 }

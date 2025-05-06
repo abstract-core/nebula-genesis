@@ -22,16 +22,16 @@ It's a npm module that query, download, cache and (optionnaly) parse Notion data
     - [Folder structure](#folder-structure)
   - [Arguments](#arguments)
     - [Required arguments](#required-arguments)
-      - [NOTION\_TOKEN](#notion_token)
-      - [DATABASE\_ID](#database_id)
+      - [NOTION_TOKEN](#notion_token)
+      - [DATABASE_ID](#database_id)
     - [Optional arguments](#optional-arguments)
       - [FILTERS](#filters)
-      - [SITE\_FOLDER\_PATH](#site_folder_path)
-      - [CACHE\_FOLDER\_NAME](#cache_folder_name)
-      - [ON\_OR\_AFTER](#on_or_after)
-      - [REINIT\_CACHE](#reinit_cache)
-      - [OUTPUT\_FORMAT](#output_format)
-      - [ASTRO\_COLLECTION\_NAME](#astro_collection_name)
+      - [SITE_FOLDER_PATH](#site_folder_path)
+      - [CACHE_FOLDER_NAME](#cache_folder_name)
+      - [ON_OR_AFTER](#on_or_after)
+      - [REINIT_CACHE](#reinit_cache)
+      - [OUTPUT_FORMAT](#output_format)
+      - [ASTRO_COLLECTION_NAME](#astro_collection_name)
   - [Notion's features support](#notions-features-support)
     - [Blocks types' support](#blocks-types-support)
     - [Property types' support](#property-types-support)
@@ -43,7 +43,6 @@ It's a npm module that query, download, cache and (optionnaly) parse Notion data
   - [Publishing](#publishing)
     - [1. Build prod script](#1-build-prod-script)
     - [2. Publish on npm](#2-publish-on-npm)
-
 
 ## How to use ?
 
@@ -61,7 +60,7 @@ Query databases and pages according to your needs.
 
 It is a normal use case to run 2 or more times `nebula-genesis`, with different [`CACHE_FOLDER_NAME`](#cachefoldername), to fetch content from mutiple databases or with differents filters.
 
-This will download content in a `cache` folder, as detailed in [Where is data downloaded ?](#where-is-data-downloaded-) section.
+This will download content in a `cache` folder, as detailed in [Download folder](#download-folder) section.
 
 Required and optional arguments are detailed in the [Arguments](#arguments) section.
 
@@ -150,7 +149,7 @@ See [Download location](#download-location) section for cache folder path.
 
 #### ASTRO_COLLECTION_NAME
 
-`ASTRO_COLLECTION_NAME` will write MD files in an Astro-shaped folder, structured as `/pages/<name>/<page-slug>.md`.
+`ASTRO_COLLECTION_NAME` will write MD files in an Astro-shaped folder, structured as `/pages/<name>/<page-id>.md`.
 
 _Collections can then be set in website codesource, using `src/content.config.ts`_
 

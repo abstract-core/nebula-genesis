@@ -10,7 +10,8 @@ import { createFolder } from "./createFolder/createFolder";
 import { downloadFiles } from "./downloadFiles/downloadFiles";
 import { downloadImage } from "./downloadImage/downloadImage";
 import { ArgsOptions } from "../_types/ArgsOptions";
-import { parseToMarkdown } from "./blocksToMarkdown/blocksToMarkdown";
+import { parseToMarkdown } from "./parseToMarkdown/parseToMarkdown";
+import { PageSummary } from "../_types/PageSummary";
 
 export async function processPage(
   notionClient: Client,
@@ -20,10 +21,12 @@ export async function processPage(
     siteFolderPath,
     outputFormat,
     astroCollectionName,
+    containerWidth,
   }: { cachePath: string } & Pick<
     ArgsOptions,
-    "siteFolderPath" | "outputFormat" | "astroCollectionName"
-  >
+    "siteFolderPath" | "outputFormat" | "astroCollectionName" | "containerWidth"
+  >,
+  pageSummary: { [id: string]: PageSummary }
 ) {
   const { blocks, images } = await getPageBlocks(notionClient, page.id);
 
@@ -40,7 +43,8 @@ export async function processPage(
 
       const filename = await downloadImage(
         `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`,
-        block
+        block,
+        containerWidth
       );
 
       (
@@ -65,7 +69,7 @@ export async function processPage(
         ? `${siteFolderPath}/src/data/${astroCollectionName}/${page.id}.md`
         : /** @todo Add an `astroFolderPath` script arg */
           `${cachePath}/pages/${page.id}.md`,
-      parseToMarkdown(title, page.properties, blocks),
+      parseToMarkdown(title, page.properties, blocks, pageSummary),
       "utf-8"
     );
   } else {

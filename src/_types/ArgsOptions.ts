@@ -10,4 +10,5 @@ export type ArgsOptions = {
   reinitCache?: boolean;
   outputFormat?: string;
   astroCollectionName?: string;
+  containerWidth: number;
 };

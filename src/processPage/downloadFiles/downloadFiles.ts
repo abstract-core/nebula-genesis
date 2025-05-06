@@ -1,6 +1,5 @@
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { writeFile } from "fs/promises";
-import fetch from "node-fetch";
 
 export async function downloadFiles(
   page: PageObjectResponse,
@@ -21,9 +20,12 @@ export async function downloadFiles(
               console.log(`Downloading ${file.file.url} from ${page.id}`);
 
               const res = await fetch(fileUrl);
-              const buffer = await res.buffer();
+              const buffer = await res.arrayBuffer();
 
-              await writeFile(`${filesFolderPath}/${filename}`, buffer);
+              await writeFile(
+                `${filesFolderPath}/${filename}`,
+                new Uint8Array(buffer)
+              );
 
               return filename;
             })()
