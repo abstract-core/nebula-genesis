@@ -19,7 +19,10 @@ export function richTextToMarkdown(
       if (richText.annotations.strikethrough) text = `~~${text}~~`;
       return acc
         ? `${acc}${
-            acc.endsWith(" ") || text.startsWith(",") || text.startsWith(".")
+            acc.endsWith(" ") ||
+            text.startsWith(" ") ||
+            text.startsWith(",") ||
+            text.startsWith(".")
               ? ""
               : " "
           }${text}`
