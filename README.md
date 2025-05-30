@@ -32,6 +32,7 @@ It's a npm module that query, download, cache and (optionnaly) parse Notion data
       - [REINIT_CACHE](#reinit_cache)
       - [OUTPUT_FORMAT](#output_format)
       - [ASTRO_COLLECTION_NAME](#astro_collection_name)
+      - [CONTAINER_WIDTH](#container_width)
   - [Notion's features support](#notions-features-support)
     - [Blocks types' support](#blocks-types-support)
     - [Property types' support](#property-types-support)
@@ -152,6 +153,12 @@ See [Download location](#download-location) section for cache folder path.
 `ASTRO_COLLECTION_NAME` will write MD files in an Astro-shaped folder, structured as `/pages/<name>/<page-id>.md`.
 
 _Collections can then be set in website codesource, using `src/content.config.ts`_
+
+#### CONTAINER_WIDTH
+
+Default : `600`
+
+Target size for downloaded image, equal to content container max width.
 
 ## Notion's features support
 
