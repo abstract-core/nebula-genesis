@@ -9,9 +9,11 @@ export function richTextToMarkdown(
     if (richText.type === "text") {
       let text = richText.text.content;
       if (richText.href) {
-        if (richText.href.startsWith("/1") && pagesSummary) {
-          const { title, slug } = pagesSummary[richText.href.slice(1)];
-          text = `[${text || title}](${slug})`;
+        if (richText.href.startsWith("/1")) {
+          if (pagesSummary?.[richText.href.slice(1)]) {
+            const { title, slug } = pagesSummary[richText.href.slice(1)];
+            text = `[${text || title}](${slug})`;
+          }
         } else text = `[${text}](${richText.href})`;
       }
       if (richText.annotations.bold) text = `**${text}**`;
