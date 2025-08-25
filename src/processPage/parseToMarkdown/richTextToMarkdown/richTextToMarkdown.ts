@@ -9,7 +9,7 @@ export function richTextToMarkdown(
     if (richText.type === "text") {
       let text = richText.text.content;
       if (richText.href) {
-        if (richText.href.startsWith("/1")) {
+        if (richText.href.length === 33 && !richText.href.includes(".")) {
           if (pagesSummary?.[richText.href.slice(1)]) {
             const { title, slug } = pagesSummary[richText.href.slice(1)];
             text = `[${text || title}](${slug})`;
@@ -29,6 +29,15 @@ export function richTextToMarkdown(
               : " "
           }${text}`
         : text;
+    } else if (
+      richText.type === "mention" &&
+      richText.mention.type === "page"
+    ) {
+      const page = pagesSummary?.[richText.mention.page.id.replaceAll("-", "")];
+      if (page) {
+        const { title, slug } = page;
+        return `${acc || ""}[${title}](${slug})`;
+      } else console.log(richText.mention.page.id, richText.href);
     } else console.log(richText.type);
     return acc;
   }, "");
