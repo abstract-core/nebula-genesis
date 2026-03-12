@@ -1,6 +1,10 @@
 import { RichTextItemResponse } from "@notionhq/client/build/src/api-endpoints";
 import { PageSummary } from "../../../_types/PageSummary";
 
+function trimTrailingSpace(text: string) {
+  return text.endsWith(" ") ? text.slice(0, -1) : text;
+}
+
 export function richTextToMarkdown(
   richTexts: RichTextItemResponse[],
   pagesSummary?: { [id: string]: PageSummary }
@@ -16,9 +20,9 @@ export function richTextToMarkdown(
           }
         } else text = `[${text}](${richText.href})`;
       }
-      if (richText.annotations.bold) text = `**${text}**`;
-      if (richText.annotations.italic) text = `*${text}*`;
-      if (richText.annotations.strikethrough) text = `~~${text}~~`;
+      if (richText.annotations.bold) text = `**${trimTrailingSpace(text)}**`;
+      if (richText.annotations.italic) text = `*${trimTrailingSpace(text)}*`;
+      if (richText.annotations.strikethrough) text = `~~${trimTrailingSpace(text)}~~`;
       return acc
         ? `${acc}${
             acc.endsWith(" ") ||
