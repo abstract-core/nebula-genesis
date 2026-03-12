@@ -3,22 +3,25 @@ import { writeFile, readFile, stat } from "fs/promises";
 
 export async function mergeCachedUpdatedPages(
   cachePath: string,
-  updatedPages: PageObjectResponse[]
+  updatedPages: PageObjectResponse[],
 ) {
-  let cachedPages: PageObjectResponse[] = [];
-
   try {
     await stat(`${cachePath}/pages.json`);
+  } catch {
+    return updatedPages;
+  }
 
-    cachedPages = JSON.parse(
-      await readFile(`${cachePath}/pages.json`, "utf-8")
-    ) as PageObjectResponse[];
-  } catch (error) {}
+  const cachedPages = JSON.parse(
+    await readFile(`${cachePath}/pages.json`, "utf-8"),
+  ) as PageObjectResponse[];
 
-  const cachedPagesIndex = cachedPages.reduce((acc, page, index) => {
-    acc[page.id] = index;
-    return acc;
-  }, {} as Record<string, number>);
+  const cachedPagesIndex = cachedPages.reduce(
+    (acc, page, index) => {
+      acc[page.id] = index;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   const mergedPages = cachedPages.slice();
 
