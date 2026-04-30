@@ -2,7 +2,10 @@ import { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import { richTextToMarkdown } from "../richTextToMarkdown/richTextToMarkdown";
 import { PageSummary } from "../../../_types/PageSummary";
 
-export function blockMarkdownSwitch(block: BlockObjectResponse, pagesSummary: { [id: string]: PageSummary }) {
+export function blockMarkdownSwitch(
+  block: BlockObjectResponse,
+  pagesSummary: { [id: string]: PageSummary },
+) {
   if (block.type === "paragraph")
     return richTextToMarkdown(block.paragraph.rich_text, pagesSummary);
   if (block.type === "heading_1")
@@ -11,6 +14,8 @@ export function blockMarkdownSwitch(block: BlockObjectResponse, pagesSummary: { 
     return `## ${richTextToMarkdown(block.heading_2.rich_text, pagesSummary)}`;
   if (block.type === "heading_3")
     return `### ${richTextToMarkdown(block.heading_3.rich_text, pagesSummary)}`;
+  if (block.type === "heading_4")
+    return `#### ${richTextToMarkdown(block.heading_4.rich_text, pagesSummary)}`;
   if (block.type === "bulleted_list_item")
     return `- ${richTextToMarkdown(block.bulleted_list_item.rich_text, pagesSummary)}`;
   if (block.type === "numbered_list_item")
@@ -23,6 +28,9 @@ export function blockMarkdownSwitch(block: BlockObjectResponse, pagesSummary: { 
         ? `${block.callout.icon.emoji} `
         : ""
     } ${richTextToMarkdown(block.callout.rich_text, pagesSummary)}`;
+  if (block.type === "table") return "";
+  if (block.type === "table_row")
+    return `| ${block.table_row.cells.map((cell) => richTextToMarkdown(cell, pagesSummary)).join(" | ")} |`;
   if (block.type === "image") {
     return block.image.type === "file"
       ? `![${richTextToMarkdown(block.image.caption, pagesSummary)}](${block.image.file.url})`

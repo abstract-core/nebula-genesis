@@ -10,13 +10,23 @@ export function parseToMarkdown(
   title: string,
   properties: PageObjectResponse["properties"],
   blocks: BlockObjectResponse[],
-  pagesSummary: { [id: string]: PageSummary }
+  pagesSummary: { [id: string]: PageSummary },
 ) {
   return `
 ${propertiesToMarkdown(properties)}
 
 # ${title}
 
-${blocks.map((block) => blockMarkdownSwitch(block, pagesSummary)).join("\n\n")}
+${blocks
+  .map(
+    (block, index) =>
+      (block.type === "table_row"
+        ? blocks[index - 1].type === "table_row" &&
+          blocks[index - 2].type !== "table_row"
+          ? `\n|${block.table_row.cells.map(() => "-").join("|")}|\n`
+          : "\n"
+        : "\n\n") + blockMarkdownSwitch(block, pagesSummary),
+  )
+  .join("")}
     `;
 }

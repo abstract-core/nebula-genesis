@@ -9,6 +9,7 @@ import { getPageBlocks } from "./getPageBlocks/getPageBlocks";
 import { createFolder } from "./createFolder/createFolder";
 import { downloadFiles } from "./downloadFiles/downloadFiles";
 import { downloadImage } from "./downloadImage/downloadImage";
+import { downloadTable } from "./downloadTable/downloadTable";
 import { ArgsOptions } from "../_types/ArgsOptions";
 import { parseToMarkdown } from "./parseToMarkdown/parseToMarkdown";
 import { PageSummary } from "../_types/PageSummary";
@@ -26,25 +27,25 @@ export async function processPage(
     ArgsOptions,
     "siteFolderPath" | "outputFormat" | "astroCollectionName" | "containerWidth"
   >,
-  pageSummary: { [id: string]: PageSummary }
+  pageSummary: { [id: string]: PageSummary },
 ) {
-  const { blocks, images } = await getPageBlocks(notionClient, page.id);
+  const { blocks, images, tables } = await getPageBlocks(notionClient, page.id);
 
   await createFolder(`${cachePath}/pages/${page.id}`);
 
   await downloadFiles(
     page,
-    `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`
+    `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`,
   );
 
-  await Promise.all(
-    images.map(async ({ block, index }) => {
+  await Promise.all([
+    ...images.map(async ({ block, index }) => {
       console.log(`Downloading ${block.id} from ${page.id}`);
 
       const filename = await downloadImage(
         `${siteFolderPath}/${astroCollectionName ? "public" : "static"}`,
         block,
-        containerWidth
+        containerWidth,
       );
 
       (
@@ -57,8 +58,13 @@ export async function processPage(
           caption: Array<RichTextItemResponse>;
         }
       ).file.url = `/${filename}`;
-    })
-  );
+    }),
+    ...tables.map(async ({ block }) => {
+      const rows = await downloadTable(notionClient, block);
+      const tableIndex = blocks.indexOf(block);
+      blocks.splice(tableIndex + 1, 0, ...rows);
+    }),
+  ]);
 
   if (outputFormat === "md") {
     const { Name: name } = page.properties;
@@ -70,13 +76,13 @@ export async function processPage(
         : /** @todo Add an `astroFolderPath` script arg */
           `${cachePath}/pages/${page.id}.md`,
       parseToMarkdown(title, page.properties, blocks, pageSummary),
-      "utf-8"
+      "utf-8",
     );
   } else {
     await writeFile(
       `${cachePath}/pages/${page.id}/page.json`,
       JSON.stringify(blocks),
-      "utf-8"
+      "utf-8",
     );
   }
 }
